@@ -4,6 +4,9 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.title.Title
 import org.bukkit.Sound
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -12,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import pl.goxy.minecraft.api.GoxyApi
 import java.time.Duration
 
-class GoxyWelcome : JavaPlugin(), Listener {
+class GoxyWelcome : JavaPlugin(), Listener, CommandExecutor {
 
     private lateinit var miniMessage: MiniMessage
 
@@ -20,11 +23,45 @@ class GoxyWelcome : JavaPlugin(), Listener {
         saveDefaultConfig()
         miniMessage = MiniMessage.miniMessage()
         server.pluginManager.registerEvents(this, this)
+        getCommand("goxywelcome")?.setExecutor(this)
         logger.info("GoxyWelcome plugin enabled!")
     }
 
     override fun onDisable() {
         logger.info("GoxyWelcome plugin disabled!")
+    }
+
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+        if (command.name.equals("goxywelcome", ignoreCase = true)) {
+            if (!sender.hasPermission("goxywelcome.admin")) {
+                sender.sendMessage(miniMessage.deserialize("<red>You don't have permission to use this command."))
+                return true
+            }
+
+            if (args.isEmpty()) {
+                sender.sendMessage(miniMessage.deserialize("<yellow>Usage: /goxywelcome reload"))
+                return true
+            }
+
+            when (args[0].lowercase()) {
+                "reload" -> {
+                    try {
+                        reloadConfig()
+                        sender.sendMessage(miniMessage.deserialize("<green>GoxyWelcome configuration reloaded successfully!"))
+                        logger.info("Configuration reloaded by ${sender.name}")
+                    } catch (e: Exception) {
+                        sender.sendMessage(miniMessage.deserialize("<red>Failed to reload configuration: ${e.message}"))
+                        logger.severe("Failed to reload configuration: ${e.message}")
+                    }
+                    return true
+                }
+                else -> {
+                    sender.sendMessage(miniMessage.deserialize("<red>Unknown subcommand. Usage: /goxywelcome reload"))
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

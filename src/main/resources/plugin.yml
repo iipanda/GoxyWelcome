@@ -3,3 +3,12 @@ version: "1.0"
 main: com.github.iipanda.goxywelcome.GoxyWelcome
 api-version: "1.18"
 depend: [goxy]
+commands:
+  goxywelcome:
+    description: GoxyWelcome plugin commands
+    usage: /goxywelcome <reload>
+    permission: goxywelcome.admin
+permissions:
+  goxywelcome.admin:
+    description: Access to GoxyWelcome admin commands
+    default: op
