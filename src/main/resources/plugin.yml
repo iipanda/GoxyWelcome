@@ -1,5 +1,5 @@
 name: GoxyWelcome
-version: "1.0"
+version: "${version}"
 main: com.github.iipanda.goxywelcome.GoxyWelcome
 api-version: "1.18"
 depend: [goxy]
