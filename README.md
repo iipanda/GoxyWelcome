@@ -79,7 +79,7 @@ message:
 
 ## TODO
 
-- [ ] Add reload command to reload configuration on the fly
+- [x] ~~Add reload command to reload configuration on the fly~~
 - [ ] Add full PlaceholderAPI support for placeholders in messages
 
 ## License
