@@ -12,6 +12,7 @@ Standard welcome plugins show messages on every player connection, creating spam
 - **💬 Rich Chat Messages** - Messages with MiniMessage formatting
 - **🏆 Title & Subtitle Display** - Configurable timing and MiniMessage support
 - **🔊 Sound Effects** - Play sounds on join
+- **📝 PlaceholderAPI Support** - Full support for PlaceholderAPI placeholders in all messages
 - **⚙️ Flexible Configuration** - Enable/disable features independently, choose full joins vs all joins
 
 ## Prerequisites
@@ -77,10 +78,21 @@ message:
   - "<rainbow>Enjoy your colorful stay!</rainbow>"
 ```
 
-## TODO
+## PlaceholderAPI Support
 
-- [x] ~~Add reload command to reload configuration on the fly~~
-- [ ] Add full PlaceholderAPI support for placeholders in messages
+GoxyWelcome supports PlaceholderAPI placeholders in all messages (chat, title, and subtitle). The plugin automatically detects if PlaceholderAPI is installed.
+
+**Available placeholders:**
+
+- `{player}` - Player name (always available)
+- Any PlaceholderAPI placeholder (e.g., `%player_displayname%`, `%vault_eco_balance%`) when PlaceholderAPI is installed
+
+```yaml
+message:
+  - "Welcome back, %player_displayname%!"
+  - "Your balance: %vault_eco_balance%"
+  - "Online players: %server_online%"
+```
 
 ## License
 

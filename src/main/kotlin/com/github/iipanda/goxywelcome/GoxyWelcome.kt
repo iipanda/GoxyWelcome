@@ -1,5 +1,6 @@
 package com.github.iipanda.goxywelcome
 
+import me.clip.placeholderapi.PlaceholderAPI
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.title.Title
@@ -18,10 +19,19 @@ import java.time.Duration
 class GoxyWelcome : JavaPlugin(), Listener, CommandExecutor {
 
     private lateinit var miniMessage: MiniMessage
+    private var placeholderAPIEnabled = false
 
     override fun onEnable() {
         saveDefaultConfig()
         miniMessage = MiniMessage.miniMessage()
+
+        placeholderAPIEnabled = server.pluginManager.getPlugin("PlaceholderAPI") != null
+        if (placeholderAPIEnabled) {
+            logger.info("PlaceholderAPI found! Placeholder support enabled.")
+        } else {
+            logger.info("PlaceholderAPI not found. Placeholder support disabled.")
+        }
+
         server.pluginManager.registerEvents(this, this)
         getCommand("goxywelcome")?.setExecutor(this)
         logger.info("GoxyWelcome plugin enabled!")
@@ -88,6 +98,16 @@ class GoxyWelcome : JavaPlugin(), Listener, CommandExecutor {
         playSoundWelcome(player, isFullJoin)
     }
 
+    private fun processPlaceholders(player: org.bukkit.entity.Player, message: String): String {
+        var processedMessage = message.replace("{player}", player.name)
+        
+        if (placeholderAPIEnabled) {
+            processedMessage = PlaceholderAPI.setPlaceholders(player, processedMessage)
+        }
+        
+        return processedMessage
+    }
+
     private fun sendChatWelcome(player: org.bukkit.entity.Player, isFullJoin: Boolean) {
         if (!config.getBoolean("chat.enabled", true)) {
             return
@@ -103,7 +123,7 @@ class GoxyWelcome : JavaPlugin(), Listener, CommandExecutor {
         }
         
         messages.forEach { message ->
-            val formattedMessage = message.replace("{player}", player.name)
+            val formattedMessage = processPlaceholders(player, message)
             val component = miniMessage.deserialize(formattedMessage)
             player.sendMessage(component)
         }
@@ -118,8 +138,8 @@ class GoxyWelcome : JavaPlugin(), Listener, CommandExecutor {
             return
         }
         
-        val titleText = config.getString("title.title", "")?.replace("{player}", player.name) ?: ""
-        val subtitleText = config.getString("title.subtitle", "")?.replace("{player}", player.name) ?: ""
+        val titleText = processPlaceholders(player, config.getString("title.title", "") ?: "")
+        val subtitleText = processPlaceholders(player, config.getString("title.subtitle", "") ?: "")
         
         if (titleText.isEmpty() && subtitleText.isEmpty()) {
             return

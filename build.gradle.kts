@@ -17,11 +17,15 @@ repositories {
     maven("https://repo.goxy.pl") {
         name = "goxy-repo"
     }
+    maven("https://repo.extendedclip.com/releases/") {
+        name = "placeholderapi-repo"
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
     compileOnly("pl.goxy.minecraft:goxy-api:1.11.1")
+    compileOnly("me.clip:placeholderapi:2.11.6")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 }
 

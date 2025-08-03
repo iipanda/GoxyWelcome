@@ -1,9 +1,13 @@
+# Supported placeholders:
+# - {player} - Current player name - always available
+# - PlaceholderAPI placeholders - available when PlaceholderAPI is installed
+
 # Chat welcome message settings
 chat:
   enabled: true
   # Show welcome message for full joins (not transfers from other servers)
   full-joins-only: true
-  # Message lines
+  # Message lines - supports placeholders
   message:
     - "<gray>------------------------------------"
     - ""
@@ -20,9 +24,9 @@ title:
   enabled: true
   # Show title for full joins only
   full-joins-only: true
-  # Main title text
+  # Main title text - supports placeholders
   title: "<gold><bold>Welcome!</bold></gold>"
-  # Subtitle text
+  # Subtitle text - supports placeholders
   subtitle: "<gray>Enjoy your stay, {player}!</gray>"
   # Title display timings (in seconds)
   fade-in: 1.0

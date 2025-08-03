@@ -3,6 +3,7 @@ version: "${version}"
 main: com.github.iipanda.goxywelcome.GoxyWelcome
 api-version: "1.18"
 depend: [goxy]
+softdepend: [PlaceholderAPI]
 commands:
   goxywelcome:
     description: GoxyWelcome plugin commands
